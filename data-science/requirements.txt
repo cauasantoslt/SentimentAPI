@@ -3,3 +3,4 @@ scikit-learn
 skl2onnx
 onnxmltools
 numpy
+packaging
