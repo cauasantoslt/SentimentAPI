@@ -1,0 +1,29 @@
+services:
+  # SERVIÇO 1: BANCO DE DADOS
+  postgres:
+    image: postgres:15-alpine
+    container_name: sentiment-db
+    environment:
+      POSTGRES_DB: sentiment_db
+      POSTGRES_USER: oracle
+      POSTGRES_PASSWORD: oracle_password
+    ports:
+      - "5432:5432"
+
+  # SERVIÇO 2: SUA API JAVA
+  backend:
+    build: .             # Lê o Dockerfile na pasta atual
+    container_name: sentiment-api
+    depends_on:
+      - postgres         # Só inicia depois do banco
+    environment:
+
+      # "postgres" aqui é o nome do serviço definido acima (DNS interno do Docker)
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/sentiment_db
+      SPRING_DATASOURCE_USERNAME: oracle
+      SPRING_DATASOURCE_PASSWORD: oracle_password
+
+      # Ativa o arquivo application-prod.properties
+      SPRING_PROFILES_ACTIVE: prod
+    ports:
+      - "8080:8080"
