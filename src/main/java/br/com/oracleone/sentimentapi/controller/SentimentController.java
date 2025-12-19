@@ -7,6 +7,9 @@ import br.com.oracleone.sentimentapi.repository.AnalysisRepository;
 import br.com.oracleone.sentimentapi.service.SentimentAnalysisService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,26 +25,33 @@ public class SentimentController {
         this.repository = repository;
     }
 
+    // --- ENDPOINT 1: ANALISAR (POST) ---
     @PostMapping
-    @Operation(summary = "Analisa o sentimento de um texto")
-    public ResponseEntity<SentimentResponse> analisar(@RequestBody @Valid SentimentRequest request) {
-        try {
-            // 1. Chama o Serviço de IA
-            var resultado = service.predict(request.text());
+    @Operation(summary = "Analisa o sentimento de um texto") // Swagger em PT-BR
+    public ResponseEntity<SentimentResponse> analyze(@RequestBody @Valid SentimentRequest request) throws Exception {
 
-            // 2. Salva no Banco (H2 ou Postgres)
-            Analysis analysis = new Analysis(request.text(), resultado.label(), resultado.probability());
-            repository.save(analysis);
+        // 1. Chama a IA
+        var result = service.predict(request.text());
 
-            // 3. Retorna pro usuário
-            return ResponseEntity.ok(
-                    new SentimentResponse(resultado.label(), resultado.probability())
-            );
+        // 2. Salva no Banco
+        Analysis analysis = new Analysis(request.text(), result.label(), result.probability());
+        repository.save(analysis);
 
-        } catch (Exception e) {
-            // Log do erro real no console
-            e.printStackTrace();
-            return ResponseEntity.internalServerError().build();
-        }
+        // 3. Retorna JSON
+        return ResponseEntity.ok(
+                new SentimentResponse(result.label(), result.probability())
+        );
+    }
+
+    // --- ENDPOINT 2: HISTÓRICO (GET) ---
+    @GetMapping("/history")
+    @Operation(summary = "Lista o histórico de análises (Paginado)")
+    public ResponseEntity<Page<SentimentResponse>> listHistory(@PageableDefault(size = 10, sort = "id") Pageable pageable) {
+
+        // Busca no banco paginado e converte para o DTO de resposta padrão
+        Page<SentimentResponse> history = repository.findAll(pageable)
+                .map(item -> new SentimentResponse(item.getForecast(), item.getProbability()));
+
+        return ResponseEntity.ok(history);
     }
 }

@@ -82,7 +82,7 @@ public class GlobalExceptionHandler {
             HttpServletRequest request
     ) {
 
-        ex.getStackTrace();
+        ex.printStackTrace();
 
         return buildError(
                 HttpStatus.SERVICE_UNAVAILABLE,
@@ -99,7 +99,7 @@ public class GlobalExceptionHandler {
             HttpServletRequest request
     ) {
 
-        ex.getStackTrace();
+        ex.printStackTrace();
 
         return buildError(
                 HttpStatus.INTERNAL_SERVER_ERROR,

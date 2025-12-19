@@ -43,27 +43,31 @@ public class SentimentAnalysisService {
             long[] labels = (long[]) results.get(0).getValue();
             long predictedLabel = labels[0];
 
-            String resultado;
+            String sentiment;
             // Mapeamento baseado no treino do DS (provavelmente tem que ajustar)
             switch ((int) predictedLabel) {
-                case 0: resultado = "Negativo"; break;
-                case 1: resultado = "Positivo"; break;
-                case 2: resultado = "Neutro"; break;
-                default: resultado = "Desconhecido";
+                case 0: sentiment = "Negativo"; break;
+                case 1: sentiment = "Positivo"; break;
+                case 2: sentiment = "Neutro"; break;
+                default: sentiment = "Desconhecido";
             }
 
             // 2. Pegar Probabilidade
-            List<OnnxMap> probabilitySequence = (List<OnnxMap>) results.get(1).getValue();
+            var probResult = results.get("output_probability").isPresent() ?
+                    results.get("output_probability").get() : results.get(1);
+
+            @SuppressWarnings("unchecked")
+            List<OnnxMap> probabilitySequence = (List<OnnxMap>) probResult.getValue();
             OnnxMap onnxMap = probabilitySequence.get(0);
+
+            @SuppressWarnings("unchecked")
             Map<Long, Float> probMap = (Map<Long, Float>) onnxMap.getValue();
 
-            // Pega a probabilidade da classe escolhida
-            float probabilidade = probMap.getOrDefault(predictedLabel, 0.0f);
+            float probability = probMap.getOrDefault(predictedLabel, 0.0f);
 
-            return new PredictionResult(resultado, (double) probabilidade);
+            return new PredictionResult(sentiment, (double) probability);
         }
     }
 
-    // Classe interna simples para passar os dados
     public record PredictionResult(String label, double probability) {}
 }
