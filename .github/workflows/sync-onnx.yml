@@ -17,26 +17,21 @@ jobs:
       # 1. Baixa todo o repositório
       - name: 📥 Checkout Code
         uses: actions/checkout@v4
-
-      # 2. Copia o arquivo (Caminhos Ajustados)
+      # 2. Copia o arquivo
       - name: 📂 Copy ONNX to Java Resources
         run: |
           echo "Copiando modelo..."
-          
-          # Garante que a pasta de destino existe
-          # Caminho: SentimentAPI/src/main/resources/
           mkdir -p src/main/resources/
-          
-          # Copia o arquivo da pasta de Data Science para o Resources
-          # O comando 'cp' vai pegar o arquivo e jogar na pasta de destino
           cp data-science/sentiment_model_multilang.onnx src/main/resources/
           
-          echo "✅ Cópia concluída!"
+          # FORÇA O GIT A VER O ARQUIVO NOVO
+          git add src/main/resources/sentiment_model_multilang.onnx
+          
+          echo "✅ Cópia e Add concluídos!"
 
-      # 3. Faz o Commit automático apenas se houve mudança
+      # 3. Faz o Commit
       - name: 💾 Commit Changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "🤖 CI: Atualizando modelo ONNX no Resources (Auto-Sync)"
-          # Avisa pro Git olhar especificamente para essa pasta
-          file_pattern: 'src/main/resources/*.onnx'
+          commit_message: "🤖 CI: Atualizando modelo ONNX (Auto-Sync)"
+          # Removi o file_pattern para ele pegar o que estiver na área de stage
