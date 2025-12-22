@@ -1,41 +1,42 @@
 name: 🔄 Sync ONNX Model
 
-# Quando isso vai rodar?
 on:
   push:
     paths:
-      - 'data-science/**.onnx' # Só roda se mudar o arquivo ONNX
+      - 'data-science/**.onnx' # Só dispara se mudar o arquivo ONNX na pasta de dados
     branches:
-      - main # Ou 'master', dependendo do seu repo
-  workflow_dispatch: # Permite rodar manualmente clicando num botão
+      - main 
 
 jobs:
   sync-model:
     runs-on: ubuntu-latest
     permissions:
-      contents: write # Permissão para o robô fazer commit
+      contents: write # Permissão para o robô fazer o commit
 
     steps:
-      # 1. Baixa o código do repositório
+      # 1. Baixa todo o repositório
       - name: 📥 Checkout Code
         uses: actions/checkout@v4
 
-      # 2. Copia o arquivo (AQUI VOCÊ PRECISA CONFERIR OS CAMINHOS)
+      # 2. Copia o arquivo (Caminhos Ajustados)
       - name: 📂 Copy ONNX to Java Resources
         run: |
           echo "Copiando modelo..."
           
-          # Cria a pasta de destino caso não exista (ajuste o caminho 'backend/...' se precisar)
-          mkdir -p backend/src/main/resources/
+          # Garante que a pasta de destino existe
+          # Caminho: SentimentAPI/src/main/resources/
+          mkdir -p src/main/resources/
           
-          # Copia o arquivo (sobrescrevendo o antigo)
-          cp data-science/sentiment_model_multilang.onnx backend/src/main/resources/
+          # Copia o arquivo da pasta de Data Science para o Resources
+          # O comando 'cp' vai pegar o arquivo e jogar na pasta de destino
+          cp data-science/sentiment_model_multilang.onnx src/main/resources/
           
           echo "✅ Cópia concluída!"
 
-      # 3. Faz o Commit e Push automático
+      # 3. Faz o Commit automático apenas se houve mudança
       - name: 💾 Commit Changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "🤖 CI: Atualizando modelo ONNX no Backend (Auto-Sync)"
+          commit_message: "🤖 CI: Atualizando modelo ONNX no Resources (Auto-Sync)"
+          # Avisa pro Git olhar especificamente para essa pasta
           file_pattern: 'src/main/resources/*.onnx'
