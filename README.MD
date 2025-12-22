@@ -1,6 +1,6 @@
 <div align="left" style="position: relative;">
-<img src="https://nocountry.tech/one.png" align="right" width="100" style="margin: auto;">
-<img src="https://nocountry.tech/nocountry-logo.png" align="right" width="100" style="margin: 10px;">
+<img src="https://nocountry.tech/one.png" align="right" width="80" style="margin: auto;">
+<img src="https://nocountry.tech/nocountry-logo.png" align="right" width="80" style="margin: 10px;">
 <h1 style="padding-bottom: 2rem;" >SentimentAPI</h1>
 <p align="left">
 	<em>Transformando feedback bruto em inteligência de dados.</em>
