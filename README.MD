@@ -90,8 +90,8 @@ Time responsável pelo desenvolvimento da solução:
 | **Backend Developers** ☕ | **Data Scientists** 📊 |
 | :--- | :--- |
 | [Julio Clepf de Carvalho](https://www.linkedin.com/in/julio-clepf/) | [Bruno Bronsato](link) |
-| [Keila De Oliveira Nunes](link) | [Carolini Rufino dos Santos](link) |
+| [Keila De Oliveira Nunes](https://www.linkedin.com/in/keilanunes-dev) | [Carolini Rufino dos Santos](https://www.linkedin.com/in/carolinirufino) |
 | [Laura Tenan](https://www.linkedin.com/in/laura-tenan/) | [Cauã Santos](https://linkedin.com/in/cauasantoslt) |
-| [Pedro Henrique de Assis Ferreira](link) | [Jefferson Franca Ferreira](link) |
+| [Pedro Henrique de Assis Ferreira](https://www.linkedin.com/in/phaferreira/) | [Jefferson Franca Ferreira](link) |
 | [Rafael Silva Nunes](https://www.linkedin.com/in/rafaelsilvanunes) | |
 | [Vinicius Silva](link) | |
