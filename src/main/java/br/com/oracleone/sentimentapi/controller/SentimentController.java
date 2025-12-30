@@ -39,7 +39,11 @@ public class SentimentController {
 
         // 3. Retorna JSON
         return ResponseEntity.ok(
-                new SentimentResponse(result.label(), result.probability())
+                new SentimentResponse(
+                        request.text(),
+                        result.label(),
+                        result.probability()
+                )
         );
     }
 
@@ -50,8 +54,11 @@ public class SentimentController {
 
         // Busca no banco paginado e converte para o DTO de resposta padrão
         Page<SentimentResponse> history = repository.findAll(pageable)
-                .map(item -> new SentimentResponse(item.getForecast(), item.getProbability()));
-
+                .map(item -> new SentimentResponse(
+                        item.getAnalyzedText(),
+                        item.getForecast(),
+                        item.getProbability()
+                ));
         return ResponseEntity.ok(history);
     }
 }

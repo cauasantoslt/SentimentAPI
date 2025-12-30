@@ -16,7 +16,7 @@ public class Analysis {
 
     private LocalDateTime dateCreated = LocalDateTime.now();
 
-    @Column(columnDefinition = "TEXT")
+    @Column(name = "analyzed_text", columnDefinition = "TEXT")
     private String analyzedText;
 
     private String forecast;

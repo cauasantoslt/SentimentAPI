@@ -10,6 +10,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
@@ -74,6 +75,20 @@ public class GlobalExceptionHandler {
         );
     }
 
+    /* ======================= 404 - NOT FOUND (NOVO) ======================= */
+
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNotFound(
+            NoHandlerFoundException ex,
+            HttpServletRequest request
+    ) {
+        return buildError(
+                HttpStatus.NOT_FOUND,
+                "Endpoint não encontrado. Verifique a URL.",
+                request.getRequestURI()
+        );
+    }
+
     /* ======================= 503 - SERVICE UNAVAILABLE ======================= */
 
     @ExceptionHandler(OrtException.class)
@@ -94,10 +109,15 @@ public class GlobalExceptionHandler {
     /* ======================= 500 - INTERNAL SERVER ERROR ======================= */
 
     @ExceptionHandler(Exception.class)
+
     public ResponseEntity<ErrorResponse> handleGenericException(
             Exception ex,
             HttpServletRequest request
-    ) {
+    ) throws Exception {
+
+        if (request.getRequestURI().contains("h2-console")) {
+            throw ex;
+        }
 
         ex.printStackTrace();
 

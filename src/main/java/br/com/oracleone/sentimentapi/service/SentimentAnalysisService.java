@@ -35,20 +35,20 @@ public class SentimentAnalysisService {
 
         OnnxTensor tensor = OnnxTensor.createTensor(env, sourceArray);
 
-        // Verificar com DS qual é o imput
         Map<String, OnnxTensor> inputs = Collections.singletonMap("text_input", tensor);
 
         try (OrtSession.Result results = session.run(inputs)) {
-            // 1. Pegar Label (Positivo/Negativo)
+            var labelResult = results.get("output_label").isPresent() ?
+                    results.get("output_label").get() : results.get(0);
+
             long[] labels = (long[]) results.get(0).getValue();
             long predictedLabel = labels[0];
 
             String sentiment;
-            // Mapeamento baseado no treino do DS (provavelmente tem que ajustar)
             switch ((int) predictedLabel) {
                 case 0: sentiment = "Negativo"; break;
-                case 1: sentiment = "Positivo"; break;
-                case 2: sentiment = "Neutro"; break;
+                case 1: sentiment = "Neutro"; break;
+                case 2: sentiment = "Positivo"; break;
                 default: sentiment = "Desconhecido";
             }
 
