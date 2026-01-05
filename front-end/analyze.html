@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SentimentAPI - Análise</title>
+    <link rel="icon" href="assets/favicon.png" type="image/x-icon" />
+    <link rel="stylesheet" href="styles/style.css" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="header__content">
+        <span class="header__logo"><strong>SentimentAPI</strong></span>
+        <nav class="header__menu">
+          <a class="header__menu__link" href="index.html">Home</a>
+          <a class="header__menu__link" href="analyze.html">Análise</a>
+          <a class="header__menu__link" href="history.html">Histórico</a>
+          <a class="header__menu__link" href="stats.html">Estatística</a>
+        </nav>
+      </div>
+    </header>
+    <main class="presentation">
+      <section class="presentation__content">
+        <h1 class="presentation__content__title">Análise de Sentimento</h1>
+        <p class="presentation__content__text">
+          Insira um comentário, avaliação ou feedback, e a SentimentAPI irá
+          classificar automaticamente o sentimento utilizando Inteligência
+          Artificial.
+        </p>
+        <textarea
+          id="textInput"
+          class="presentation__textarea"
+          placeholder="Digite seu comentário aqui..."
+          rows="6"
+        ></textarea>
+        <button id="analyzeBtn" class="presentation__button">
+          Analisar sentimento
+        </button>
+      </section>
+      <section class="presentation__result">
+        <h2 class="presentation__result__title">Sentimento</h2>
+        <p id="sentimentText" class="presentation__result__text">
+          Aqui aparecerá o sentimento...
+        </p>
+        <span id="sentimentEmoji" class="presentation__result__emoji">
+          🙂
+        </span>
+      </section>
+    </main>
+    <footer class="footer">
+      <p>Hackathon ONE II - SentimentAPI</p>
+    </footer>
+    <script src="scripts/analyze.js"></script>
+  </body>
+</html>
