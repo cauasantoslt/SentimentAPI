@@ -1,7 +1,9 @@
 package br.com.oracleone.sentimentapi.controller;
 
+import br.com.oracleone.sentimentapi.domain.HistoryResponse;
 import br.com.oracleone.sentimentapi.domain.SentimentRequest;
 import br.com.oracleone.sentimentapi.domain.SentimentResponse;
+import br.com.oracleone.sentimentapi.domain.StatsResponse;
 import br.com.oracleone.sentimentapi.model.Analysis;
 import br.com.oracleone.sentimentapi.repository.AnalysisRepository;
 import br.com.oracleone.sentimentapi.service.SentimentAnalysisService;
@@ -13,6 +15,10 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Comparator;
+import java.util.List;
+
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/sentiment")
 public class SentimentController {
@@ -40,7 +46,6 @@ public class SentimentController {
         // 3. Retorna JSON
         return ResponseEntity.ok(
                 new SentimentResponse(
-                        request.text(),
                         result.label(),
                         result.probability()
                 )
@@ -50,15 +55,67 @@ public class SentimentController {
     // --- ENDPOINT 2: HISTÓRICO (GET) ---
     @GetMapping("/history")
     @Operation(summary = "Lista o histórico de análises (Paginado)")
-    public ResponseEntity<Page<SentimentResponse>> listHistory(@PageableDefault(size = 10, sort = "id") Pageable pageable) {
+    public ResponseEntity<Page<HistoryResponse>> listHistory(@PageableDefault(size = 4, sort = "id") Pageable pageable) {
 
         // Busca no banco paginado e converte para o DTO de resposta padrão
-        Page<SentimentResponse> history = repository.findAll(pageable)
-                .map(item -> new SentimentResponse(
+        Page<HistoryResponse> history = repository.findAll(pageable)
+                .map(item -> new HistoryResponse(
                         item.getAnalyzedText(),
                         item.getForecast(),
                         item.getProbability()
                 ));
+
         return ResponseEntity.ok(history);
+    }
+
+    // --- ENDPOINT 3: ESTATÍSTICA (GET) ---
+    @GetMapping("/stats")
+    @Operation(summary = "Estatísticas de sentimento dos últimos X comentários")
+    public ResponseEntity<StatsResponse> getStats(
+            @RequestParam(defaultValue = "20") int limit
+    ) {
+
+        List<Analysis> allAnalyses = repository.findAll();
+
+        if (allAnalyses.isEmpty()) {
+            return ResponseEntity.ok(
+                    new StatsResponse(0, 0, 0, 0, 0, 0, 0)
+            );
+        }
+
+        List<Analysis> lastAnalyses = allAnalyses.stream()
+                .sorted(Comparator.comparing(Analysis::getId).reversed())
+                .limit(limit)
+                .toList();
+
+        long total = lastAnalyses.size();
+
+        long positive = lastAnalyses.stream()
+                .filter(a -> "POSITIVO".equalsIgnoreCase(a.getForecast()))
+                .count();
+
+        long negative = lastAnalyses.stream()
+                .filter(a -> "NEGATIVO".equalsIgnoreCase(a.getForecast()))
+                .count();
+
+        long neutral = lastAnalyses.stream()
+                .filter(a -> "NEUTRO".equalsIgnoreCase(a.getForecast()))
+                .count();
+
+        double positivePercentage = (positive * 100.0) / total;
+        double negativePercentage = (negative * 100.0) / total;
+        double neutralPercentage = (neutral * 100.0) / total;
+
+        StatsResponse response = new StatsResponse(
+                total,
+                positive,
+                negative,
+                neutral,
+                positivePercentage,
+                negativePercentage,
+                neutralPercentage
+        );
+
+        return ResponseEntity.ok(response);
     }
 }
