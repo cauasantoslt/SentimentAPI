@@ -194,5 +194,4 @@ Time responsável pelo desenvolvimento da solução:
  [Laura Tenan](https://www.linkedin.com/in/laura-tenan/) | [Cauã Santos](https://linkedin.com/in/cauasantoslt) | 
 | [Keila De Oliveira Nunes](https://www.linkedin.com/in/keilanunes-dev) | [Jefferson Franca Ferreira](link) |
 | [Pedro Henrique de Assis Ferreira](https://www.linkedin.com/in/phaferreira/) | 
-| [Rafael Silva Nunes](https://www.linkedin.com/in/rafaelsilvanunes) | |
-| [Vinicius Silva](link) | |
+| [Rafael Silva Nunes](https://www.linkedin.com/in/rafaelsilvanunes) | 
