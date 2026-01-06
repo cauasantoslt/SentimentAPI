@@ -18,131 +18,49 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    /* ======================= 400 - BAD REQUEST ======================= */
-
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleValidationError(
-            MethodArgumentNotValidException ex,
-            HttpServletRequest request
-    ) {
-
-        String message = ex.getBindingResult()
-                .getFieldErrors()
-                .stream()
+    public ResponseEntity<ErrorResponse> handleValidationError(MethodArgumentNotValidException ex, HttpServletRequest request) {
+        String message = ex.getBindingResult().getFieldErrors().stream()
                 .map(FieldError::getDefaultMessage)
                 .collect(Collectors.joining(", "));
-
-        return buildError(
-                HttpStatus.BAD_REQUEST,
-                message,
-                request.getRequestURI()
-        );
+        return buildError(HttpStatus.BAD_REQUEST, message, request.getRequestURI());
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<ErrorResponse> handleConstraintViolation(
-            ConstraintViolationException ex,
-            HttpServletRequest request
-    ) {
-        return buildError(
-                HttpStatus.BAD_REQUEST,
-                ex.getMessage(),
-                request.getRequestURI()
-        );
+    public ResponseEntity<ErrorResponse> handleConstraintViolation(ConstraintViolationException ex, HttpServletRequest request) {
+        return buildError(HttpStatus.BAD_REQUEST, ex.getMessage(), request.getRequestURI());
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<ErrorResponse> handleInvalidJson(
-            HttpMessageNotReadableException ex,
-            HttpServletRequest request
-    ) {
-        return buildError(
-                HttpStatus.BAD_REQUEST,
-                "JSON inválido ou malformado",
-                request.getRequestURI()
-        );
+    public ResponseEntity<ErrorResponse> handleInvalidJson(HttpMessageNotReadableException ex, HttpServletRequest request) {
+        return buildError(HttpStatus.BAD_REQUEST, "JSON inválido ou malformado", request.getRequestURI());
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ErrorResponse> handleIllegalArgument(
-            IllegalArgumentException ex,
-            HttpServletRequest request
-    ) {
-        return buildError(
-                HttpStatus.BAD_REQUEST,
-                ex.getMessage(),
-                request.getRequestURI()
-        );
+    public ResponseEntity<ErrorResponse> handleIllegalArgument(IllegalArgumentException ex, HttpServletRequest request) {
+        return buildError(HttpStatus.BAD_REQUEST, ex.getMessage(), request.getRequestURI());
     }
-
-    /* ======================= 404 - NOT FOUND (NOVO) ======================= */
 
     @ExceptionHandler(NoHandlerFoundException.class)
-    public ResponseEntity<ErrorResponse> handleNotFound(
-            NoHandlerFoundException ex,
-            HttpServletRequest request
-    ) {
-        return buildError(
-                HttpStatus.NOT_FOUND,
-                "Endpoint não encontrado. Verifique a URL.",
-                request.getRequestURI()
-        );
+    public ResponseEntity<ErrorResponse> handleNotFound(NoHandlerFoundException ex, HttpServletRequest request) {
+        return buildError(HttpStatus.NOT_FOUND, "Endpoint não encontrado", request.getRequestURI());
     }
-
-    /* ======================= 503 - SERVICE UNAVAILABLE ======================= */
-
-    @ExceptionHandler(OrtException.class)
-    public ResponseEntity<ErrorResponse> handleOrtException(
-            OrtException ex,
-            HttpServletRequest request
-    ) {
-
-        ex.printStackTrace();
-
-        return buildError(
-                HttpStatus.SERVICE_UNAVAILABLE,
-                "Modelo de IA indisponível no momento",
-                request.getRequestURI()
-        );
-    }
-
-    /* ======================= 500 - INTERNAL SERVER ERROR ======================= */
 
     @ExceptionHandler(Exception.class)
-
-    public ResponseEntity<ErrorResponse> handleGenericException(
-            Exception ex,
-            HttpServletRequest request
-    ) throws Exception {
-
-        if (request.getRequestURI().contains("h2-console")) {
-            throw ex;
-        }
-
+    public ResponseEntity<ErrorResponse> handleGenericException(Exception ex, HttpServletRequest request) {
+        // Removida a lógica do H2-console
         ex.printStackTrace();
-
-        return buildError(
-                HttpStatus.INTERNAL_SERVER_ERROR,
-                "Erro interno inesperado",
-                request.getRequestURI()
-        );
+        return buildError(HttpStatus.INTERNAL_SERVER_ERROR, "Erro interno inesperado", request.getRequestURI());
     }
 
-    /* ======================= METODO AUXILIAR ======================= */
+    @ExceptionHandler(OrtException.class)
+    public ResponseEntity<ErrorResponse> handleOrtException(OrtException ex, HttpServletRequest request) {
+        ex.printStackTrace();
+        return buildError(HttpStatus.SERVICE_UNAVAILABLE, "Modelo de IA indisponível", request.getRequestURI());
+    }
 
-    private ResponseEntity<ErrorResponse> buildError(
-            HttpStatus status,
-            String message,
-            String path
-    ) {
-        ErrorResponse error = new ErrorResponse(
-                LocalDateTime.now(),
-                status.value(),
-                status.getReasonPhrase(),
-                message,
-                path
-        );
-
+    private ResponseEntity<ErrorResponse> buildError(HttpStatus status, String message, String path) {
+        ErrorResponse error = new ErrorResponse(LocalDateTime.now(), status.value(), status.getReasonPhrase(), message, path);
         return ResponseEntity.status(status).body(error);
     }
 }

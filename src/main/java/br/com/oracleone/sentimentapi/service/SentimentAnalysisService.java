@@ -1,9 +1,13 @@
 package br.com.oracleone.sentimentapi.service;
 
 import ai.onnxruntime.*;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -17,18 +21,19 @@ public class SentimentAnalysisService {
     public SentimentAnalysisService() throws Exception {
         this.env = OrtEnvironment.getEnvironment();
 
-        // CORREÇÃO PARA DOCKER/JAR:
-        // Não usar Paths.get(URI), usar getResourceAsStream + readAllBytes
-        try (InputStream modelStream = getClass().getClassLoader().getResourceAsStream("sentiment_model_multilang.onnx")) {
-            if (modelStream == null) {
-                throw new RuntimeException("Arquivo 'sentiment_model_multilang.onnx' não encontrado em resources!");
-            }
-            byte[] modelArray = modelStream.readAllBytes();
-            this.session = env.createSession(modelArray);
+        ClassPathResource resource = new ClassPathResource("sentiment_model_multilang.onnx");
+
+        Path tempFile = Files.createTempFile("sentiment-model-", ".onnx");
+
+        try (InputStream is = resource.getInputStream()) {
+            Files.copy(is, tempFile, StandardCopyOption.REPLACE_EXISTING);
         }
+
+        tempFile.toFile().deleteOnExit();
+
+        this.session = env.createSession(tempFile.toString());
     }
 
-    // Retorno agora é um objeto contendo Label e Probabilidade
     public PredictionResult predict(String text) throws Exception {
         String[][] sourceArray = new String[1][1];
         sourceArray[0][0] = text;
@@ -52,7 +57,6 @@ public class SentimentAnalysisService {
                 default: sentiment = "Desconhecido";
             }
 
-            // 2. Pegar Probabilidade
             var probResult = results.get("output_probability").isPresent() ?
                     results.get("output_probability").get() : results.get(1);
 

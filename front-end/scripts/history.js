@@ -39,7 +39,7 @@ function capitalize(text) {
 async function loadHistory(page = 0) {
   try {
     const response = await fetch(
-      `http://localhost:8080/sentiment/history?page=${page}`
+      `/sentiment/history?page=${page}`
     );
     const data = await response.json();
 

@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     try {
       const response = await fetch(
-        `http://localhost:8080/sentiment/stats?limit=${limit}`
+        `/sentiment/stats?limit=${limit}`
       );
 
       if (!response.ok) {

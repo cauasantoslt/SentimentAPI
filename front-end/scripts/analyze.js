@@ -22,7 +22,7 @@ if (text.length < 10) {
 
 
     try {
-      const response = await fetch("http://localhost:8080/sentiment", {
+      const response = await fetch("/sentiment", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
