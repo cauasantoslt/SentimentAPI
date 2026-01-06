@@ -10,28 +10,30 @@
 
 
 ## 📝 Introdução 
-Análise de Sentimentos de Feedbacks a partir de textos analisados por um modelo treinado, o qual resulta na classificação imediata da opinião como Positiva ou Negativa. Utilizando técnicas de Processamento de Linguagem Natural (NLP) e um modelo otimizado, o sistema é capaz de interpretar feedbacks em Português e Inglês, garantindo alta performance e fácil integração via ONNX.
+A SentimentAPI é uma API REST desenvolvida em Java com Spring Boot que realiza análise de sentimentos em textos, classificando-os como Positivo, Negativo ou Neutro.
 
-## 🎯 Objetivos
-* Treinar modelo....
-* Gerar arquivo Onnx....
-* Desenvolver Back-End Spring-Boot
-* Encapsular o modelo desenvolvido em ONNX no Back-End Java
-* Criar API para consulta para analisar, das analises realizadas e erros (?)
-* Persistência de dados em Banco de Dados (?)
-* Front-End (?)
-* Conteinerização do projeto em Docker
-* Ambiente de avaliação em Cloud da OCI (?)
+O sistema integra um modelo de Ciência de Dados treinado com técnicas de Processamento de Linguagem Natural (NLP), permitindo que aplicações consumam previsões de sentimento de forma automática por meio de requisições HTTP, com retorno em formato JSON.
 
-## 🏗️ Arquitetura
-* JDK 21
-* Python/Jupyter (?)
-* Spring-Boot 4.0.0
-* Onnx Runtime 1.23.2
-* Outras Dependências: JPA / Flyway / Lombok / Swagger
-* Banco de Dados: H2 (ambiente teste) / Postgres (ambiente produção)
-* Docker
-* Etc....
+O projeto foi desenvolvido como um MVP funcional, com foco na integração entre Back-end e Ciência de Dados, demonstrando uma solução aplicável a cenários reais de negócio.
+
+
+## 🎯 Problema de Negócio
+
+Empresas recebem diariamente um grande volume de comentários, avaliações e feedbacks de clientes em canais como redes sociais, pesquisas de satisfação e plataformas de atendimento.
+
+* A análise manual dessas informações se torna inviável com o aumento do volume de dados.
+* A SentimentAPI oferece uma solução automática para:
+* Identificar rapidamente elogios e reclamações;
+* Priorizar respostas a comentários negativos;
+* Acompanhar a percepção da marca ao longo do tempo;
+* Apoiar decisões nas áreas de atendimento, marketing e operações.
+
+## ⚙️ Funcionalidades (MVP)
+* Classificação de sentimento de textos (Positivo / Negativo / Neutro);
+* API REST para consumo por aplicações externas;
+* Retorno da previsão acompanhada de probabilidade;
+* Validação de entrada e tratamento de erros;
+* Suporte a textos em Português e Inglês.
 
 # 🧠 Recursos de Data Science
 
@@ -84,59 +86,82 @@ Para garantir a robustez do modelo em cenários reais, foram aplicadas as seguin
 
 # 💻 Recursos de Back-end
 
-[Inserir breve descrição sobre o papel do Back-end no projeto. Ex: Responsável por gerenciar as requisições da API, realizar a comunicação com o banco de dados e executar o modelo de IA através do ONNX Runtime.]
+O Back-end é responsável por gerenciar as requisições da API, validar os dados de entrada, integrar o modelo de Inteligência Artificial e retornar as previsões em formato JSON.
+
+Ele atua como a camada intermediária entre as aplicações clientes e o modelo de Ciência de Dados, garantindo comunicação consistente, tratamento de erros e clareza nas respostas.
 
 ## 🛠️ Stack Tecnológico
 
 | Recurso | Versão/Tipo | Descrição |
 | :--- | :--- | :--- |
-| **[Linguagem]** | [Inserir Versão] | [Breve descrição do uso] |
-| **[Framework]** | [Inserir Nome] | [Breve descrição do uso] |
-| **[Banco de Dados]** | [Inserir Nome] | [Breve descrição do uso] |
-| **[Build Tool]** | [Inserir Nome] | [Breve descrição do uso, ex: Maven/Gradle] |
-| **[IA Runtime]** | [Inserir Nome] | [Biblioteca usada para carregar o ONNX] |
+| **Java** | 17.x | Linguagem principal da aplicação |
+| **Spring Boot** | 3.x | Framework para construção da API REST |
+| **Maven** |  | Gerenciamento de dependências e build |
+| **ONNX Runtime** | 1.23.2 | Execução do modelo de Machine Learning |
+| **H2 / PostgreSQL** | Opicional | Persistência de dados (quando habilitada) |
 
 ## 🏗️ Arquitetura da Aplicação
 
-O sistema foi estruturado seguindo o padrão **[Inserir Padrão, ex: MVC / Clean Arch / Microsserviços]**, organizado da seguinte forma:
+O sistema foi estruturado seguindo o padrão **MVC**, organizado da seguinte forma:
 
-### 1. Camada de [Nome da Camada 1, ex: Controladores]
-* **Função:** [Descrever responsabilidade]
-* **Componentes:** [Listar principais endpoints ou classes]
+### 1. Camada de Controladores
+* **Função:** Receber requisições HTTP e retornar respostas JSON.
+* **Componentes:** Componentes: Endpoints REST, como /sentiment.
 
-### 2. Camada de [Nome da Camada 2, ex: Serviços / Business Logic]
-* **Função:** [Descrever responsabilidade]
-* **Integração IA:** [Descrever como essa camada chama o modelo .onnx]
+### 2. Camada de Serviços
+* **Função:**  Implementar a lógica de negócio.
+* **Integração IA:** Responsável por carregar o modelo .onnx, preparar os dados de entrada e interpretar a saída do modelo (rótulos e probabilidades).
 
-### 3. Camada de [Nome da Camada 3, ex: Persistência / Dados]
-* **Função:** [Descrever responsabilidade]
-* **ORM/Driver:** [Citar ferramenta usada para falar com o banco]
+### 3. Camada de Dados
+* **Função:** Persistência das requisições e previsões (quando habilitada).
+* **ORM/Driver:** Spring Data JPA / JDBC.
 
 ## 🔌 Integrações e Segurança
 
 Para garantir a robustez e a comunicação do sistema, foram implementados:
 
-* **[Recurso de Segurança, ex: Autenticação/JWT]:**
-    * [Detalhe sobre como funciona]
-    * [Detalhe sobre a proteção]
+* **Integração com Modelo ONNX:**
+    * Carregamento do modelo serializado;
+    * Conversão da saída numérica do modelo para rótulos compreensíveis (Positivo, Neutro ou Negativo).
 
-* **[Integração com Modelo ONNX]:**
-    * [Detalhe sobre o carregamento do arquivo]
-    * [Detalhe sobre o tratamento da saída (0, 1, 2)]
+* **Validação de Entrada:**
+    * Verificação da existência do texto e tamanho mínimo;
+    * Retorno de mensagens de erro claras e amigáveis.
 
-* **[Outra Integração, ex: Swagger/Docker]:**
-    * [Detalhe sobre o recurso]
+* **Consistência de Respostas:**
+    * Padronização das respostas JSON, tanto para sucesso quanto para erro.
 
-## 📦 Artefatos de Deploy
+## 📡 Endpoints da API
 
-* **`[Nome do Arquivo Principal, ex: application.jar]`**: [Descrição do executável]
-* **`[Arquivo de Configuração, ex: application.properties]`**: [Descrição das variáveis de ambiente]
-* **`[Documentação, ex: Swagger UI]`**: [Link ou descrição de onde acessar a doc da API]
+* POST /sentiment
+
+Classifica o sentimento de um texto enviado.
 
 
-## 🛠️ Setup
-* GitHub do Código Fonte: https://github.com/cauasantoslt/SentimentAPI
-* Necessário utilizar o argumento para compilação (IntelliJ em Run Options, Add VM Options): --enable-native-access=ALL-UNNAMED
+
+* Request: 
+
+
+``` json
+{
+
+  "text": "O atendimento foi excelente e muito rápido."
+
+}
+
+```
+
+* Response: 
+
+``` json
+{
+
+  "previsao": "Positivo",
+
+  "probabilidade": 0.87
+
+}
+```
 
 ## ⚙️ Como Executar
 Este projeto foi desenvolvido utilizando Jupyter Notebook. Para reproduzir o treinamento do modelo ou gerar novas versões do arquivo ONNX, siga os passos abaixo:
@@ -152,15 +177,14 @@ Este projeto foi desenvolvido utilizando Jupyter Notebook. Para reproduzir o tre
 1. Clone o repositório
 
 ```Bash
+git clone https://github.com/cauasantoslt/SentimentAPI.git
 
-git clone https://github.com/seu-usuario/seu-repo.git
-cd seu-repo/data-science
+cd SentimentAPI
 ```
 
 2. Instale as dependências
 
 ```Bash
-
 pip install -r requirements.txt
 ```
 
@@ -169,7 +193,6 @@ pip install -r requirements.txt
 * Abra o terminal na pasta do projeto e digite:
 
 ```Bash
-
 jupyter notebook
 ```
 
@@ -177,7 +200,28 @@ jupyter notebook
 
 * Execute todas as células sequencialmente para baixar o dataset, treinar o modelo e exportar o arquivo .onnx.
 
+### Compilar o projeto
+
+```Bash
+./mvnw clean install
+```
+
+### Executar a aplicação
+```Bash
+./mvnw spring-boot:run
+```
+
+A aplicação ficará disponível em:http://localhost:8080
+
 *Nota sobre a Integração:* O artefato final deste processo é o arquivo sentiment_model_multilang.onnx. Este arquivo deve ser carregado pela aplicação Backend (Java) para realizar as predições em produção. O input esperado pelo modelo chama-se text_input.
+
+---
+
+## 📦 Artefatos de Deploy
+
+* application.jar: artefato executável da aplicação.
+* application.properties: arquivo de configuração com variáveis de ambiente.
+* Postman / cURL: ferramentas recomendadas para teste dos endpoints da API.
 
 ## 🔗 Links para recursos
 * JDK Microsoft: https://learn.microsoft.com/en-us/java/openjdk/download
