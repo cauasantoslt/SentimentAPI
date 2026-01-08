@@ -98,7 +98,9 @@ Ele atua como a camada intermediária entre as aplicações clientes e o modelo 
 | **Spring Boot** | 3.x | Framework para construção da API REST |
 | **Maven** |  | Gerenciamento de dependências e build |
 | **ONNX Runtime** | 1.23.2 | Execução do modelo de Machine Learning |
-| **H2 / PostgreSQL** | Opicional | Persistência de dados (quando habilitada) |
+| **Nginx** | Opicional | Proxy Reverso utilizado para servir o Frontend |
+| **PostgreSQL** | Opicional | Banco de dados para persistência de dados |
+| **Flyway** | Opicional | Gerenciamento de migrações de banco de dados |
 
 ## 🏗️ Arquitetura da Aplicação
 
