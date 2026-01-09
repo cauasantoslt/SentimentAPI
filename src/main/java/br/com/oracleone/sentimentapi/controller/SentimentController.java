@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Comparator;
 import java.util.List;
@@ -43,6 +44,24 @@ public class SentimentController {
                         result.probability()
                 )
         );
+    }
+
+    @PostMapping(value = "/batch", consumes = "multipart/form-data")
+    public ResponseEntity<List<HistoryResponse>> analyzeBatch(@RequestParam("file") MultipartFile file) throws Exception {
+
+        if (file.isEmpty()) {
+            throw new IllegalArgumentException("O arquivo não pode estar vazio.");
+        }
+
+        List<Analysis> entities = service.processBatch(file);
+
+        repository.saveAll(entities);
+
+        List<HistoryResponse> response = entities.stream()
+                .map(a -> new HistoryResponse(a.getAnalyzedText(), a.getForecast(), a.getProbability()))
+                .toList();
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/history")

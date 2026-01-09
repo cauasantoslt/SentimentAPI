@@ -1,13 +1,19 @@
 package br.com.oracleone.sentimentapi.service;
 
 import ai.onnxruntime.*;
+import br.com.oracleone.sentimentapi.model.Analysis;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedReader;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -71,6 +77,38 @@ public class SentimentAnalysisService {
 
             return new PredictionResult(sentiment, (double) probability);
         }
+    }
+
+    public List<Analysis> processBatch(MultipartFile file) throws Exception {
+        List<Analysis> analyses = new ArrayList<>();
+
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
+            String line;
+            boolean isFirstLine = true;
+
+            while ((line = br.readLine()) != null) {
+                // Tenta identificar e pular cabeçalho (ex: coluna "texto" ou "review")
+                if (isFirstLine) {
+                    isFirstLine = false;
+                    String lowerLine = line.toLowerCase();
+                    if (lowerLine.contains("text") || lowerLine.contains("comentario") || lowerLine.contains("review")) {
+                        continue;
+                    }
+                }
+
+                String text = line.trim();
+                if (text.startsWith("\"") && text.endsWith("\"")) {
+                    text = text.substring(1, text.length() - 1);
+                }
+
+                if (!text.isEmpty()) {
+                    PredictionResult result = predict(text);
+
+                    analyses.add(new Analysis(text, result.label(), result.probability()));
+                }
+            }
+        }
+        return analyses;
     }
 
     public record PredictionResult(String label, double probability) {}
