@@ -2,6 +2,7 @@ const historyContainer = document.getElementById("historyContainer");
 const prevBtn = document.getElementById("prevBtn");
 const nextBtn = document.getElementById("nextBtn");
 const pageInfo = document.getElementById("pageInfo");
+const totalInfo = document.getElementById("totalInfo");
 
 let currentPage = 0;
 let totalPages = 1;
@@ -42,10 +43,12 @@ async function loadHistory(page = 0) {
       `/sentiment/history?page=${page}`
     );
     const data = await response.json();
-
+    totalInfo.textContent = `Total de comentários: ${data.totalElements}`;
     historyContainer.innerHTML = "";
 
 if (!data.content || data.content.length === 0) {
+  totalInfo.textContent = "Total de comentários: 0";
+  totalInfo.style.display = "none";
   historyContainer.innerHTML = `
     <div class="history__empty">
       <p class="history__empty-text">
@@ -65,6 +68,7 @@ pageInfo.style.display = "none";
   return;
 }
 
+    totalInfo.style.display = "block";
     data.content.forEach((item) => {
       const card = document.createElement("div");
       card.classList.add("history__item");
@@ -84,7 +88,7 @@ pageInfo.style.display = "none";
     </strong>
 
     <span class="history__probability">
-      Probabilidade: ${(item.probability * 100).toFixed(0)}%
+      Probabilidade: ${(item.probability * 100).toFixed(1)}%
     </span>
   </div>
 `;

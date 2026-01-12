@@ -142,7 +142,7 @@ body {
 }
 
 .presentation__textarea {
-  width: 100%;
+  width: 97%;
   font-size: 1.5rem;
   padding: 10px;
   margin-top: 20px;
@@ -153,6 +153,8 @@ body {
 }
 
 .presentation__button {
+  width: 100%;
+  text-align: center;
   font-size: 1.5rem;
   padding: 10px;
   margin-top: 20px;
@@ -295,6 +297,16 @@ body {
   font-family: var(--fonte-secundaria);
 }
 
+.history__total {
+  font-family: var(--fonte-secundaria);
+  margin-top: 20px;
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--cor-secundaria);
+  opacity: 0.9;
+}
+
 .pagination {
   margin-top: 40px;
   width: 100%;
@@ -365,6 +377,26 @@ body {
 
 .stats--negative {
   border-left: 6px solid #f44336;
+}
+
+.stats__total {
+  font-family: var(--fonte-secundaria);
+  margin-top: 10px;
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--cor-secundaria);
+  opacity: 0.9;
+}
+
+.stats__used-info {
+  font-family: var(--fonte-secundaria);
+  margin-top: 10px;
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--cor-secundaria);
+  opacity: 0.9;
 }
 
 .footer {

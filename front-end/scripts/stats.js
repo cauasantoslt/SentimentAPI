@@ -2,10 +2,23 @@ document.addEventListener("DOMContentLoaded", () => {
   const limitInput = document.getElementById("limitInput");
   const statsBtn = document.getElementById("statsBtn");
   const statsMessage = document.getElementById("statsMessage");
+  const statsTotal = document.getElementById("statsTotal");
+  const statsUsedInfo = document.getElementById("statsUsedInfo");
 
   const positivePercent = document.getElementById("positivePercent");
   const neutralPercent = document.getElementById("neutralPercent");
   const negativePercent = document.getElementById("negativePercent");
+
+  async function loadTotal() {
+    try {
+      const response = await fetch("/sentiment/stats");
+      const data = await response.json();
+
+      statsTotal.innerHTML = `Total de comentários disponíveis: ${data.total}`;
+    } catch (error) {
+      statsTotal.textContent = "Não foi possível carregar o total de comentários.";
+    }
+  }
 
   statsBtn.addEventListener("click", async () => {
     const limit = parseInt(limitInput.value);
@@ -31,8 +44,8 @@ document.addEventListener("DOMContentLoaded", () => {
         neutralPercent.textContent = "—";
         negativePercent.textContent = "—";
 
-        statsMessage.textContent =
-          "Não existem análises suficientes para a estatística ser gerada.";
+        statsMessage.textContent = "Não existem análises suficientes para a estatística ser gerada.";
+        statsUsedInfo.textContent = "";
         return;
       }
 
@@ -43,9 +56,13 @@ document.addEventListener("DOMContentLoaded", () => {
       neutralPercent.textContent = data.neutralPercentage.toFixed(1) + "%";
 
       negativePercent.textContent = data.negativePercentage.toFixed(1) + "%";
+
+      statsUsedInfo.textContent = `Mostrando estatísticas de ${data.used} de ${data.total} comentários disponíveis.`;
     } catch (error) {
       console.error(error);
       statsMessage.textContent ="Não foi possível carregar as estatísticas.";
+      statsUsedInfo.textContent = "";
     }
   });
+  loadTotal();
 });

@@ -10,6 +10,7 @@ import br.com.oracleone.sentimentapi.service.SentimentAnalysisService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -65,7 +66,7 @@ public class SentimentController {
     }
 
     @GetMapping("/history")
-    public ResponseEntity<Page<HistoryResponse>> listHistory(@PageableDefault(size = 4, sort = "id") Pageable pageable) {
+    public ResponseEntity<Page<HistoryResponse>> listHistory(@PageableDefault(size = 4, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<HistoryResponse> history = repository.findAll(pageable)
                 .map(item -> new HistoryResponse(
                         item.getAnalyzedText(),
@@ -81,7 +82,7 @@ public class SentimentController {
         List<Analysis> allAnalyses = repository.findAll();
 
         if (allAnalyses.isEmpty()) {
-            return ResponseEntity.ok(new StatsResponse(0, 0, 0, 0, 0, 0, 0));
+            return ResponseEntity.ok(new StatsResponse(0, 0, 0, 0, 0, 0, 0, 0));
         }
 
         List<Analysis> lastAnalyses = allAnalyses.stream()
@@ -89,15 +90,16 @@ public class SentimentController {
                 .limit(limit)
                 .toList();
 
-        long total = lastAnalyses.size();
+        long total = allAnalyses.size();
+        long used = lastAnalyses.size();
         long positive = lastAnalyses.stream().filter(a -> "Positivo".equalsIgnoreCase(a.getForecast())).count();
         long negative = lastAnalyses.stream().filter(a -> "Negativo".equalsIgnoreCase(a.getForecast())).count();
         long neutral = lastAnalyses.stream().filter(a -> "Neutro".equalsIgnoreCase(a.getForecast())).count();
 
-        double posPct = total > 0 ? (positive * 100.0) / total : 0;
-        double negPct = total > 0 ? (negative * 100.0) / total : 0;
-        double neuPct = total > 0 ? (neutral * 100.0) / total : 0;
+        double posPct = used > 0 ? (positive * 100.0) / used : 0;
+        double negPct = used > 0 ? (negative * 100.0) / used : 0;
+        double neuPct = used > 0 ? (neutral * 100.0) / used : 0;
 
-        return ResponseEntity.ok(new StatsResponse(total, positive, negative, neutral, posPct, negPct, neuPct));
+        return ResponseEntity.ok(new StatsResponse(total, used, positive, negative, neutral, posPct, negPct, neuPct));
     }
 }
