@@ -46,10 +46,10 @@ async function loadHistory(page = 0) {
     totalInfo.textContent = `Total de comentários: ${data.totalElements}`;
     historyContainer.innerHTML = "";
 
-if (!data.content || data.content.length === 0) {
-  totalInfo.textContent = "Total de comentários: 0";
-  totalInfo.style.display = "none";
-  historyContainer.innerHTML = `
+    if (!data.content || data.content.length === 0) {
+      totalInfo.textContent = "Total de comentários: 0";
+      totalInfo.style.display = "none";
+      historyContainer.innerHTML = `
     <div class="history__empty">
       <p class="history__empty-text">
         Nenhuma análise foi realizada ainda.
@@ -60,13 +60,12 @@ if (!data.content || data.content.length === 0) {
     </div>
   `;
 
-prevBtn.style.display = "none";
-nextBtn.style.display = "none";
-pageInfo.style.display = "none";
+      prevBtn.style.display = "none";
+      nextBtn.style.display = "none";
+      pageInfo.style.display = "none";
 
-
-  return;
-}
+      return;
+    }
 
     totalInfo.style.display = "block";
     data.content.forEach((item) => {
@@ -90,6 +89,18 @@ pageInfo.style.display = "none";
     <span class="history__probability">
       Probabilidade: ${(item.probability * 100).toFixed(1)}%
     </span>
+    ${
+      item.topFeatures && item.topFeatures.length > 0
+        ? `
+    <div class="history__features">
+      <span class="history__features-label">Palavras-chave:</span>
+      ${item.topFeatures
+        .map((word) => `<span class="history__feature">${word}</span>`)
+        .join("")}
+    </div>
+  `
+        : ""
+    }
   </div>
 `;
 

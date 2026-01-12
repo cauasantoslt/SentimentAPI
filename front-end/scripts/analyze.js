@@ -203,14 +203,10 @@ document.addEventListener("DOMContentLoaded", () => {
     // Top Features
     if (data.topFeatures && data.topFeatures.length > 0) {
       topFeaturesContainer.style.display = "block";
-      topFeaturesList.innerHTML = "";
       data.topFeatures.forEach((word) => {
         const span = document.createElement("span");
         span.textContent = word;
-        span.style.backgroundColor = "#eee";
-        span.style.padding = "4px 8px";
-        span.style.borderRadius = "4px";
-        span.style.fontSize = "1rem";
+        span.classList.add("history__feature");
         topFeaturesList.appendChild(span);
       });
     } else {
@@ -248,6 +244,18 @@ document.addEventListener("DOMContentLoaded", () => {
     <span class="history__probability">
       Probabilidade: ${probability}
     </span>
+      ${
+        item.topFeatures && item.topFeatures.length > 0
+          ? `
+    <div class="history__features">
+      <span class="history__features-label">Palavras-chave:</span>
+      ${item.topFeatures
+        .map((word) => `<span class="history__feature">${word}</span>`)
+        .join("")}
+    </div>
+  `
+          : ""
+      }
   </div>
 `;
 

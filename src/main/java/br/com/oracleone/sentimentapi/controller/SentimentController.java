@@ -42,24 +42,29 @@ public class SentimentController {
         return ResponseEntity.ok(
                 new SentimentResponse(
                         result.label(),
-                        result.probability()
-                )
-        );
+                        result.probability(),
+                        result.topFeatures()));
     }
 
     @PostMapping(value = "/batch", consumes = "multipart/form-data")
-    public ResponseEntity<List<HistoryResponse>> analyzeBatch(@RequestParam("file") MultipartFile file) throws Exception {
+    public ResponseEntity<List<HistoryResponse>> analyzeBatch(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam(value = "header", defaultValue = "true") boolean header) throws Exception {
 
         if (file.isEmpty()) {
             throw new IllegalArgumentException("O arquivo não pode estar vazio.");
         }
 
-        List<Analysis> entities = service.processBatch(file);
+        List<Analysis> entities = service.processBatch(file, header);
 
         repository.saveAll(entities);
 
         List<HistoryResponse> response = entities.stream()
-                .map(a -> new HistoryResponse(a.getAnalyzedText(), a.getForecast(), a.getProbability()))
+                .map(a -> new HistoryResponse(
+                        a.getAnalyzedText(),
+                        a.getForecast(),
+                        a.getProbability(),
+                        service.extractTopFeatures(a.getAnalyzedText(), a.getForecast())))
                 .toList();
 
         return ResponseEntity.ok(response);
@@ -71,8 +76,8 @@ public class SentimentController {
                 .map(item -> new HistoryResponse(
                         item.getAnalyzedText(),
                         item.getForecast(),
-                        item.getProbability()
-                ));
+                        item.getProbability(),
+                        service.extractTopFeatures(item.getAnalyzedText(), item.getForecast())));
 
         return ResponseEntity.ok(history);
     }

@@ -307,6 +307,30 @@ body {
   opacity: 0.9;
 }
 
+.history__features {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.history__features-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--cor-secundaria);
+  font-family: var(--fonte-secundaria);
+  margin-right: 6px;
+}
+
+.history__feature {
+  background: rgba(0, 0, 0, 0.05);
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-family: var(--fonte-secundaria);
+  color: var(--cor-secundaria);
+}
+
 .pagination {
   margin-top: 40px;
   width: 100%;
