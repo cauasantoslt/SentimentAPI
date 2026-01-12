@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>SentimentAPI - Estatística</title>
+    <link rel="icon" href="assets/favicon.png" type="image/x-icon"/>
+    <link rel="stylesheet" href="styles/style.css"/>
+</head>
+<body>
+<header class="header">
+    <div class="header__content">
+        <span class="header__logo"><strong>SentimentAPI</strong></span>
+        <nav class="header__menu">
+            <a class="header__menu__link" href="index.html">Home</a>
+            <a class="header__menu__link" href="analyze.html">Análise</a>
+            <a class="header__menu__link" href="history.html">Histórico</a>
+            <a class="header__menu__link" href="stats.html">Estatística</a>
+        </nav>
+    </div>
+</header>
+<main class="presentation">
+    <section class="presentation__content">
+        <h1 class="presentation__content__title">Estatísticas de Sentimento</h1>
+        <p class="presentation__content__text">
+            Nesta seção, você pode visualizar uma visão geral dos sentimentos
+            analisados pela <strong>SentimentAPI</strong>. Escolha abaixo quantos
+            comentários recentes devem ser considerados para o cálculo das
+            estatísticas.
+        </p>
+        <label class="presentation__label" for="limitInput">
+            Quantidade de comentários
+        </label>
+        <input
+                id="limitInput"
+                type="number"
+                min="1"
+                value="20"
+                class="presentation__input"
+        />
+        <p id="statsTotal" class="stats__total"> Total de comentários disponíveis: 0</p>
+        <button id="statsBtn" class="presentation__button">
+            Gerar estatísticas
+        </button>
+        <p id="statsMessage" class="stats__message"></p>
+    </section>
+    <section class="presentation__stats">
+        <h2 class="presentation__stats__title">Resultado</h2>
+        <div class="stats__card stats--positive">
+            <span class="stats__emoji">😊</span>
+            <strong>Positivo</strong>
+            <span id="positivePercent">0%</span>
+        </div>
+        <div class="stats__card stats--neutral">
+            <span class="stats__emoji">😐</span>
+            <strong>Neutro</strong>
+            <span id="neutralPercent">0%</span>
+        </div>
+        <div class="stats__card stats--negative">
+            <span class="stats__emoji">😞</span>
+            <strong>Negativo</strong>
+            <span id="negativePercent">0%</span>
+        </div>
+        <p id="statsUsedInfo" class="stats__used-info"></p>
+    </section>
+</main>
+<footer class="footer">
+    <p>Hackathon ONE II - SentimentAPI</p>
+</footer>
+<script src="scripts/stats.js"></script>
+</body>
+</html>

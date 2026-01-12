@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>SentimentAPI - Histórico</title>
+    <link rel="icon" href="assets/favicon.png" type="image/x-icon"/>
+    <link rel="stylesheet" href="styles/style.css"/>
+</head>
+<body>
+<header class="header">
+    <div class="header__content">
+        <span class="header__logo"><strong>SentimentAPI</strong></span>
+        <nav class="header__menu">
+            <a class="header__menu__link" href="index.html">Home</a>
+            <a class="header__menu__link" href="analyze.html">Análise</a>
+            <a class="header__menu__link" href="history.html">Histórico</a>
+            <a class="header__menu__link" href="stats.html">Estatística</a>
+        </nav>
+    </div>
+</header>
+<main class="presentation">
+    <section class="presentation__content">
+        <h1 class="presentation__content__title">Histórico de Análises</h1>
+        <p class="presentation__content__text">
+            Aqui você pode visualizar os comentários já analisados pela
+            <strong>SentimentAPI</strong>, incluindo o sentimento identificado e a
+            probabilidade associada a cada resultado. Cada análise é classificada
+            automaticamente como <strong>positiva</strong>,
+            <strong>neutra</strong> ou <strong>negativa</strong>, permitindo uma
+            interpretação objetiva e confiável do feedback dos usuários.
+        </p>
+        <div class="presentation__content__image">
+            <img
+                    src="assets/sentiments.png"
+                    alt="Exemplos de sentimentos: neutro, positivo e negativo"
+            />
+        </div>
+    </section>
+    <section class="history__wrapper">
+        <section id="historyContainer" class="history">
+            <div class="history__item">
+                <span class="history__emoji">🙂</span>
+                <div class="history__info">
+                    <p class="history__comment">
+                        "Eu adorei o atendimento, foi excelente!"
+                    </p>
+                    <p class="history__sentiment">Positivo</p>
+                    <p class="history__probability">Probabilidade: 0.87</p>
+                </div>
+            </div>
+        </section>
+        <div class="pagination">
+            <button id="prevBtn" class="pagination__button">Anterior</button>
+            <span id="pageInfo" class="pagination__info">Página 1 de 5</span>
+            <button id="nextBtn" class="pagination__button">Próxima</button>
+        </div>
+        <p id="totalInfo" class="history__total">Total de comentários: 0</p>
+    </section>
+</main>
+<footer class="footer">
+    <p>Hackathon ONE II - SentimentAPI</p>
+</footer>
+<script src="scripts/history.js"></script>
+</body>
+</html>
