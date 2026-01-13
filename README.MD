@@ -150,6 +150,8 @@ Abaixo os principais endpoints da aplicação:
 ### 1. Analisar Texto Único
 * **URL:** `/sentiment`
 * **Método:** `POST`
+
+#### Exemplo 1: Positivo
 * **Corpo (JSON):**
 ```json
 {
@@ -160,8 +162,40 @@ Abaixo os principais endpoints da aplicação:
 ```json
 {
   "label": "Positivo",
-  "probability": 0.87,
+  "probability": 0.98,
   "topFeatures": ["excelente", "rápido"]
+}
+```
+
+#### Exemplo 2: Negativo
+* **Corpo (JSON):**
+```json
+{
+  "text": "O produto chegou quebrado e o suporte não ajudou."
+}
+```
+* **Resposta (JSON):**
+```json
+{
+  "label": "Negativo",
+  "probability": 0.95,
+  "topFeatures": ["quebrado", "suporte"]
+}
+```
+
+#### Exemplo 3: Neutro
+* **Corpo (JSON):**
+```json
+{
+  "text": "A entrega foi feita conforme o prazo estipulado."
+}
+```
+* **Resposta (JSON):**
+```json
+{
+  "label": "Neutro",
+  "probability": 0.75,
+  "topFeatures": ["prazo"]
 }
 ```
 
