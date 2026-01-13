@@ -94,13 +94,13 @@ Ele atua como a camada intermediária entre as aplicações clientes e o modelo 
 
 | Recurso | Versão/Tipo | Descrição |
 | :--- | :--- | :--- |
-| **Java** | 17.x | Linguagem principal da aplicação |
-| **Spring Boot** | 3.x | Framework para construção da API REST |
-| **Maven** |  | Gerenciamento de dependências e build |
-| **ONNX Runtime** | 1.23.2 | Execução do modelo de Machine Learning |
-| **Nginx** | Opicional | Proxy Reverso utilizado para servir o Frontend |
-| **PostgreSQL** | Opicional | Banco de dados para persistência de dados |
-| **Flyway** | Opicional | Gerenciamento de migrações de banco de dados |
+| **Java** | 21.x | Linguagem principal da aplicação |
+| **Spring Boot** | 4.x | Framework para construção da API REST |
+| **Maven** | 3.9 | Gerenciamento de dependências e build |
+| **ONNX Runtime** | 1.19.2 | Execução do modelo de Machine Learning |
+| **Nginx** | Opcional | Proxy Reverso utilizado para servir o Frontend |
+| **PostgreSQL** | Opcional | Banco de dados para persistência de dados |
+| **Flyway** | Opcional | Gerenciamento de migrações de banco de dados |
 
 ## 🏗️ Arquitetura da Aplicação
 
