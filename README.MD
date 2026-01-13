@@ -60,7 +60,7 @@ O modelo de Análise de Sentimentos utiliza uma arquitetura de aprendizado super
 ### 1. Pré-Processamento e Vetorização
 * **TF-IDF Vectorizer:** Transforma texto em números baseando-se na frequência e relevância das palavras.
 * **N-Grams (1, 2):** Configurado para entender palavras isoladas ("lucro") e pares de palavras ("não lucro", "lucro líquido") para captar contexto.
-* **Multilanguage Support:** O modelo foi treinado para processar entradas tanto em **Português (PT-BR)** quanto em **Inglês (EN)** simultaneamente.
+* **Multilanguage Support:** O modelo foi treinado para processar entradas tanto em **Português (PT-BR)** quanto em **Inglês (EN)** e em **Espanhol (ES)** simultaneamente.
 
 ### 2. Algoritmo Classificador
 * **Logistic Regression:** Escolhido por sua eficiência em classificação de texto e probabilidade calibrada.
@@ -184,52 +184,67 @@ Abaixo os principais endpoints da aplicação:
 * **Resposta:** Contagem total, percentuais de positivos/negativos/neutros.
 
 ## ⚙️ Como Executar
-Este projeto foi desenvolvido utilizando Jupyter Notebook. Para reproduzir o treinamento do modelo ou gerar novas versões do arquivo ONNX, siga os passos abaixo:
 
-#### **Pré-requisitos**:
-* Python 3.8+ (para treinar modelo, opcional se já tiver o .onnx)
-* JDK 21
-* Maven
-* PostgreSQL rodando localmente
+Este projeto é dividido em duas partes principais: **Ciência de Dados** (treinamento e exportação do modelo) e **Produção** (API e Aplicação Web).
 
-#### **Passo a Passo**
+### Pré-requisitos
+Certifique-se de ter as ferramentas abaixo instaladas:
 
-1. Clone o repositório
+*   **Java JDK 21+**: [Microsoft Build of OpenJDK](https://learn.microsoft.com/en-us/java/openjdk/download)
+*   **Maven**: Ferramenta de build necessária para compilar o projeto Java.
+    *   [Download Maven](https://maven.apache.org/download.cgi)
+*   **Docker Desktop**: Necessário para rodar a aplicação em containers.
+    *   [Download Docker Desktop](https://www.docker.com/products/docker-desktop/)
+*   **Python 3.8+**: Apenas se for executar os notebooks de Ciência de Dados.
 
-```Bash
-git clone https://github.com/cauasantoslt/SentimentAPI.git
-cd SentimentAPI
-```
+---
 
-2. Instale as dependências
+### Passo 1: Ciência de Dados (Opcional se já tiver o .onnx)
+Se você precisa retreinar o modelo ou explorar a análise de dados, siga este fluxo. Caso contrário, pule para o **Passo 2**.
 
-```Bash
-pip install -r requirements.txt
-```
+1.  **Acesse a pasta de Data Science**:
+    ```bash
+    cd data-science
+    ```
 
-3. Execute o Notebook
+2.  **Instale as dependências Python**:
+    Recomendamos o uso de um ambiente virtual (venv).
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-* Abra o terminal na pasta do projeto e digite:
+3.  **Execute o Jupyter Notebook**:
+    ```bash
+    jupyter notebook
+    ```
+    *   Abra o arquivo `AnaliseDeSentimentos.ipynb`.
+    *   Execute as células para baixar o dataset, treinar o modelo e gerar o arquivo `sentiment_model_multilang.onnx`.
+    *   Este arquivo `.onnx` é automaticamente utilizado pela aplicação Java (ele deve estar na pasta raiz ou no local configurado).
 
-```Bash
-jupyter notebook
-```
+---
 
-* Abra o arquivo AnaliseDeSentimentos.ipynb.
+### Passo 2: Produção (Aplicação Completa)
+Para rodar a aplicação completa (Banco de Dados + API + Frontend) utilizando Docker.
 
-* Execute todas as células sequencialmente para baixar o dataset, treinar o modelo e exportar o arquivo .onnx.
+1.  **Compile o Projeto Java**:
+    Antes de criar a imagem Docker, é necessário gerar o arquivo `.jar` da aplicação. Na raiz do projeto, execute:
+    ```bash
+    mvn clean install
+    ```
+    *Isso baixará as dependências e criará o arquivo `application.jar` na pasta `target/`.*
 
-### Compilar o projeto
+2.  **Suba os Containers com Docker Compose**:
+    ```bash
+    docker-compose up --build
+    ```
+    *Isso iniciará:*
+    *   🐘 **PostgreSQL** (Porta 5432)
+    *   ☕ **Backend Java** (Porta 8080)
+    *   🌐 **Frontend Nginx** (Porta 80)
 
-```Bash
-./mvnw clean install
-```
+3.  **Acesse a Aplicação**:
+    *   Abra seu navegador em: **http://localhost**
 
-### Executar a aplicação
-```Bash
-./mvnw spring-boot:run
-```
-A API ficará disponível em: http://localhost
 
 ---
 
