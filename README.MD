@@ -162,8 +162,8 @@ Abaixo os principais endpoints da aplicação:
 ```json
 {
   "label": "Positivo",
-  "probability": 0.98,
-  "topFeatures": ["excelente", "rápido"]
+  "probability": 0.99,
+  "topFeatures": ["excelente", "rápido", "atendimento"]
 }
 ```
 
@@ -178,7 +178,7 @@ Abaixo os principais endpoints da aplicação:
 ```json
 {
   "label": "Negativo",
-  "probability": 0.95,
+  "probability": 0.97,
   "topFeatures": ["quebrado", "suporte"]
 }
 ```
@@ -187,15 +187,15 @@ Abaixo os principais endpoints da aplicação:
 * **Corpo (JSON):**
 ```json
 {
-  "text": "A entrega foi feita conforme o prazo estipulado."
+  "text": "Nem amei nem odiei, é ok."
 }
 ```
 * **Resposta (JSON):**
 ```json
 {
   "label": "Neutro",
-  "probability": 0.75,
-  "topFeatures": ["prazo"]
+  "probability": 1.00,
+  "topFeatures": ["amei", "odiei"]
 }
 ```
 
