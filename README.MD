@@ -29,11 +29,14 @@ Empresas recebem diariamente um grande volume de comentários, avaliações e fe
 * Apoiar decisões nas áreas de atendimento, marketing e operações.
 
 ## ⚙️ Funcionalidades (MVP)
-* Classificação de sentimento de textos (Positivo / Negativo / Neutro);
-* API REST para consumo por aplicações externas;
-* Retorno da previsão acompanhada de probabilidade;
-* Validação de entrada e tratamento de erros;
-* Suporte a textos em Português e Inglês.
+* **Classificação de Sentimento:** Identifica se um texto é Positivo, Negativo ou Neutro.
+* **Top Features:** Destaca as palavras-chave que mais influenciaram na decisão do modelo.
+* **Análise em Lote (Batch):** Processamento de múltiplos comentários via upload de arquivo CSV.
+* **Histórico de Análises:** Registro persistente de todas as análises realizadas.
+* **Dashboard de Estatísticas:** Visão geral da distribuição dos sentimentos processados.
+* **Interface Web:** Front-end amigável para interação direta com a API.
+* **API REST:** Endpoints documentados para integração com outros sistemas.
+* **Suporte Trilingue:** Processamento de textos em Português, Inglês e Espanhol.
 
 # 🧠 Recursos de Data Science
 
@@ -98,25 +101,31 @@ Ele atua como a camada intermediária entre as aplicações clientes e o modelo 
 | **Spring Boot** | 4.x | Framework para construção da API REST |
 | **Maven** | 3.9 | Gerenciamento de dependências e build |
 | **ONNX Runtime** | 1.19.2 | Execução do modelo de Machine Learning |
-| **Nginx** | Opcional | Proxy Reverso utilizado para servir o Frontend |
+| **Nginx** | 1.25+ | Proxy Reverso para servir o Frontend e rotear requisições |
+| **Docker Compose** | 3.x | Orquestração dos containers (DB, API, Frontend) |
 | **PostgreSQL** | 15-Alpine | Banco de dados para persistência de dados |
 | **Flyway** | Latest | Gerenciamento de migrações de banco de dados |
+| **HTML/CSS/JS** | Vanilla | Interface Web leve e responsiva |
 
 ## 🏗️ Arquitetura da Aplicação
 
 O sistema foi estruturado seguindo o padrão **MVC**, organizado da seguinte forma:
 
-### 1. Camada de Controladores
+### 1. Camada de Controladores (API)
 * **Função:** Receber requisições HTTP e retornar respostas JSON.
-* **Componentes:** Componentes: Endpoints REST, como /sentiment.
+* **Componentes:** Endpoints REST como `/sentiment`, `/sentiment/batch`.
 
 ### 2. Camada de Serviços
 * **Função:**  Implementar a lógica de negócio.
-* **Integração IA:** Responsável por carregar o modelo .onnx, preparar os dados de entrada e interpretar a saída do modelo (rótulos e probabilidades).
+* **Integração IA:** Responsável por carregar o modelo .onnx, preparar os dados de entrada e interpretar a saída do modelo (rótulos, probabilidades e top features).
 
 ### 3. Camada de Dados
-* **Função:** Persistência das requisições e previsões (quando habilitada).
-* **ORM/Driver:** Spring Data JPA / JDBC.
+* **Função:** Persistência das requisições e previsões.
+* **Tecnologia:** PostgreSQL via Spring Data JPA.
+
+### 4. Camada de Frontend
+* **Função:** Interface para usuário final.
+* **Hospedagem:** Servidor Nginx em container dedicado.
 
 ## 🔌 Integrações e Segurança
 
@@ -132,47 +141,56 @@ Para garantir a robustez e a comunicação do sistema, foram implementados:
 
 * **Consistência de Respostas:**
     * Padronização das respostas JSON, tanto para sucesso quanto para erro.
+    * Validação de arquivos CSV para processamento em lote.
 
 ## 📡 Endpoints da API
 
-* POST /sentiment
+Abaixo os principais endpoints da aplicação:
 
-Classifica o sentimento de um texto enviado.
-
-
-
-* Request: 
-
-
-``` json
+### 1. Analisar Texto Único
+* **URL:** `/sentiment`
+* **Método:** `POST`
+* **Corpo (JSON):**
+```json
 {
-
   "text": "O atendimento foi excelente e muito rápido."
-
 }
-
 ```
-
-* Response: 
-
-``` json
+* **Resposta (JSON):**
+```json
 {
-
-  "previsao": "Positivo",
-
-  "probabilidade": 0.87
-
+  "label": "Positivo",
+  "probability": 0.87,
+  "topFeatures": ["excelente", "rápido"]
 }
 ```
+
+### 2. Analisar Lote (CSV)
+* **URL:** `/sentiment/batch`
+* **Método:** `POST`
+* **Consumes:** `multipart/form-data`
+* **Parâmetro:** `file` (Arquivo .csv - uma frase por linha)
+* **Resposta:** Lista JSON com as análises de cada linha.
+
+### 3. Consultar Histórico
+* **URL:** `/sentiment/history`
+* **Método:** `GET`
+* **Parâmetros:** `page`, `size` (Paginação)
+* **Resposta:** Objeto Pageable com histórico de análises.
+
+### 4. Obter Estatísticas
+* **URL:** `/sentiment/stats`
+* **Método:** `GET`
+* **Resposta:** Contagem total, percentuais de positivos/negativos/neutros.
 
 ## ⚙️ Como Executar
 Este projeto foi desenvolvido utilizando Jupyter Notebook. Para reproduzir o treinamento do modelo ou gerar novas versões do arquivo ONNX, siga os passos abaixo:
 
 #### **Pré-requisitos**:
-
-* Python 3.8 ou superior
-
-* Pip (Gerenciador de pacotes)
+* Python 3.8+ (para treinar modelo, opcional se já tiver o .onnx)
+* JDK 21
+* Maven
+* PostgreSQL rodando localmente
 
 #### **Passo a Passo**
 
@@ -180,7 +198,6 @@ Este projeto foi desenvolvido utilizando Jupyter Notebook. Para reproduzir o tre
 
 ```Bash
 git clone https://github.com/cauasantoslt/SentimentAPI.git
-
 cd SentimentAPI
 ```
 
@@ -212,10 +229,7 @@ jupyter notebook
 ```Bash
 ./mvnw spring-boot:run
 ```
-
-A aplicação ficará disponível em:http://localhost:8080
-
-*Nota sobre a Integração:* O artefato final deste processo é o arquivo sentiment_model_multilang.onnx. Este arquivo deve ser carregado pela aplicação Backend (Java) para realizar as predições em produção. O input esperado pelo modelo chama-se text_input.
+A API ficará disponível em: http://localhost
 
 ---
 
@@ -223,7 +237,7 @@ A aplicação ficará disponível em:http://localhost:8080
 
 * application.jar: artefato executável da aplicação.
 * application.properties: arquivo de configuração com variáveis de ambiente.
-* Postman / cURL: ferramentas recomendadas para teste dos endpoints da API.
+* docker-compose.yml: orquestração dos serviços.
 
 ## 🔗 Links para recursos
 * JDK Microsoft: https://learn.microsoft.com/en-us/java/openjdk/download
@@ -237,7 +251,7 @@ Time responsável pelo desenvolvimento da solução:
 | **Backend Developers** ☕ | **Data Scientists** 📊 |
 | :--- | :--- |
 | [Julio Clepf de Carvalho](https://www.linkedin.com/in/julio-clepf/) | [Carolini Rufino dos Santos](https://www.linkedin.com/in/carolinirufino) |
- [Laura Tenan](https://www.linkedin.com/in/laura-tenan/) | [Cauã Santos](https://linkedin.com/in/cauasantoslt) | 
+| [Laura Tenan](https://www.linkedin.com/in/laura-tenan/) | [Cauã Santos](https://linkedin.com/in/cauasantoslt) | 
 | [Keila De Oliveira Nunes](https://www.linkedin.com/in/keilanunes-dev) | [Jefferson Franca Ferreira](https://www.linkedin.com/in/jefferson-ferreira-ds/) |
 | [Pedro Henrique de Assis Ferreira](https://www.linkedin.com/in/phaferreira/) | 
 | [Rafael Silva Nunes](https://www.linkedin.com/in/rafaelsilvanunes) | 

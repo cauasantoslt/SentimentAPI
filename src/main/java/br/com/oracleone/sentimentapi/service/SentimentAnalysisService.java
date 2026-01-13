@@ -52,7 +52,7 @@ public class SentimentAnalysisService {
             "aplicación", "aplicacion", "tienda", "cancelación", "cancelacion", "cobro");
 
     private static final List<String> POSITIVE_KEYWORDS = List.of(
-            "top", "ótimo", "otimo", "incrível", "incrivel", "maravilhoso", "perfeito",
+            "top", "adorei", "ótimo", "otimo", "incrível", "incrivel", "maravilhoso", "perfeito",
             "sensacional", "rápido", "rapido", "excelente", "fantástico", "fantastico",
             "lindo", "impecável", "impecavel", "bom", "boa", "amei", "gostei", "adoro",
             "amo", "recomendo", "parabéns", "parabens", "eficiente", "eficaz", "gentil",
@@ -61,7 +61,7 @@ public class SentimentAnalysisService {
             "atendimento", "suporte", "entrega", "prazo", "produto", "serviço", "servico",
             "qualidade", "preço", "preco", "valor", "site", "aplicativo", "app", "sistema",
             "vendedor", "loja", "rapidez", "agilidade", "amazing", "incredible",
-            "fantastic", "fast", "wonderful", "flawless", "excellent", "great", "perfect",
+            "fantastic", "fast", "wonderful", "terrific", "flawless", "excellent", "great", "perfect",
             "good", "very good", "best", "love", "like", "happy", "glad", "pleased",
             "awesome", "cool", "nice", "quick", "service", "support", "delivery", "time",
             "speed", "product", "quality", "price", "value", "website", "application",
@@ -146,21 +146,15 @@ public class SentimentAnalysisService {
         } else if ("Negativo".equalsIgnoreCase(sentiment)) {
             targetKeywords = NEGATIVE_KEYWORDS;
         } else {
-            // For Neutral, check both to see if any strong words appear (optional, but
-            // helpful)
             List<String> all = new ArrayList<>(POSITIVE_KEYWORDS);
             all.addAll(NEGATIVE_KEYWORDS);
             targetKeywords = all;
         }
 
-        // Use a Set to avoid duplicates (e.g. same word in both lists or encountered
-        // twice)
         Set<String> found = new LinkedHashSet<>();
         String lowerText = text.toLowerCase();
 
         for (String word : targetKeywords) {
-            // Check if text contains the word. List has specific nouns.
-            // Using contains handles unaccented checks if list has them.
             if (lowerText.contains(word.toLowerCase())) {
                 found.add(word);
             }
@@ -177,7 +171,6 @@ public class SentimentAnalysisService {
             boolean isFirstLine = true;
 
             while ((line = br.readLine()) != null) {
-                // Pular cabeçalho se a flag estiver ativa
                 if (isFirstLine) {
                     isFirstLine = false;
                     if (skipHeader) {
