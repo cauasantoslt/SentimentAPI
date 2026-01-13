@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>SentimentAPI - Análise</title>
+    <link rel="icon" href="assets/favicon.png" type="image/x-icon"/>
+    <link rel="stylesheet" href="styles/style.css"/>
+</head>
+<body>
+<header class="header">
+    <div class="header__content">
+        <span class="header__logo"><strong>SentimentAPI</strong></span>
+        <nav class="header__menu">
+            <a class="header__menu__link" href="index.html">Home</a>
+            <a class="header__menu__link" href="analyze.html">Análise</a>
+            <a class="header__menu__link" href="history.html">Histórico</a>
+            <a class="header__menu__link" href="stats.html">Estatística</a>
+        </nav>
+    </div>
+</header>
+<main class="presentation">
+    <section class="presentation__content">
+        <h1 class="presentation__content__title">Análise de Sentimento</h1>
+        <p class="presentation__content__text">
+            Insira um comentário ou faça upload de um arquivo CSV para classificar
+            automaticamente o sentimento.
+        </p>
+        <!-- Toggle Modes -->
+        <div
+                class="analysis-mode-toggle"
+                style="margin-bottom: 20px; display: flex; gap: 10px"
+        >
+            <button
+                    id="btnModeText"
+                    class="presentation__button"
+                    style="
+              margin-top: 0;
+              flex: 1;
+              background-color: var(--cor-terciaria);
+            "
+            >
+                Texto
+            </button>
+            <button
+                    id="btnModeFile"
+                    class="presentation__button"
+                    style="margin-top: 0; flex: 1; background-color: #ddd; color: #333"
+            >
+                Arquivo
+            </button>
+        </div>
+        <!-- TEXT MODE -->
+        <div id="sectionTextMode">
+          <textarea
+                  id="textInput"
+                  class="presentation__textarea"
+                  placeholder="Digite seu comentário aqui..."
+                  rows="6"
+          ></textarea>
+            <button id="analyzeBtn" class="presentation__button">
+                Analisar sentimento
+            </button>
+        </div>
+        <!-- FILE MODE -->
+        <div
+                id="sectionFileMode"
+                style="display: none; flex-direction: column; gap: 15px"
+        >
+            <div
+                    style="
+              padding: 20px;
+              border: 2px dashed #ccc;
+              border-radius: 8px;
+              text-align: center;
+            "
+            >
+                <input
+                        type="file"
+                        id="fileInput"
+                        accept=".csv, .txt"
+                        style="display: none"
+                />
+                <label
+                        for="fileInput"
+                        class="presentation__result__text"
+                        style="cursor: pointer; font-size: 1.2rem"
+                >
+                    📂 Clique para escolher um arquivo <br/>
+                    <span
+                            style="
+                  font-family: var(--fonte-secundaria);
+                  font-size: 0.9rem;
+                  color: #777;
+                "
+                    >(.csv ou .txt)</span
+                    >
+                </label>
+                <div
+                        id="fileNameDisplay"
+                        style="
+                font-family: var(--fonte-secundaria);
+                margin-top: 10px;
+                font-weight: bold;
+                color: var(--cor-terciaria);
+              "
+                ></div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px">
+                <input
+                        type="checkbox"
+                        id="skipHeaderCheck"
+                        checked
+                        style="width: 20px; height: 20px"
+                />
+                <label
+                        for="skipHeaderCheck"
+                        style="font-family: var(--fonte-secundaria); font-size: 1.1rem"
+                >Pular primeira linha? (Cabeçalho)</label
+                >
+            </div>
+            <button id="analyzeBatchBtn" class="presentation__button">
+                Processar Arquivo
+            </button>
+        </div>
+    </section>
+    <section class="presentation__result">
+        <h2 class="presentation__result__title">Resultado</h2>
+        <!-- Result Single -->
+        <div id="resultSingle">
+            <p id="sentimentText" class="presentation__result__text">
+                Aqui aparecerá o sentimento...
+            </p>
+            <span id="sentimentEmoji" class="presentation__result__emoji">
+            🙂
+          </span>
+            <!-- Top Features Section -->
+            <div
+                    id="topFeaturesContainer"
+                    class="history__features"
+                    style="display: none"
+            >
+                <h3
+                        style="
+                font-weight: 600;
+                color: var(--cor-secundaria);
+                font-family: var(--fonte-secundaria);
+                font-size: 1.2rem;
+                margin-bottom: 10px;
+              "
+                >
+                    Palavras-chave:
+                </h3>
+                <div
+                        id="topFeaturesList"
+                        style="
+                display: flex;
+                gap: 8px;
+                flex-wrap: wrap;
+                justify-content: center;
+              "
+                ></div>
+            </div>
+        </div>
+        <!-- Result Batch -->
+        <div id="resultBatch" style="display: none; width: 100%">
+            <p class="presentation__result__text" id="batchStatusText">
+                Aguardando processamento...
+            </p>
+            <div
+                    id="batchOutput"
+                    style="
+              max-height: 300px;
+              overflow-y: auto;
+              text-align: left;
+              background: var(--cor-primaria);
+              padding: 10px;
+              border-radius: 8px;
+              margin-top: 10px;
+            "
+            ></div>
+        </div>
+    </section>
+</main>
+<footer class="footer">
+    <p>Hackathon ONE II - SentimentAPI</p>
+</footer>
+<script src="scripts/analyze.js"></script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+services:
+  # 1. Banco de Dados
+  postgres:
+    image: postgres:15-alpine
+    container_name: sentiment-db
+    environment:
+      POSTGRES_DB: sentiment_db
+      POSTGRES_USER: oracle
+      POSTGRES_PASSWORD: oracle_password
+    ports:
+      - "5432:5432" # Pode fechar essa porta na OCI depois
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U oracle -d sentiment_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # 2. Backend Java (API)
+  backend:
+    build: .
+    container_name: sentiment-api
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/sentiment_db
+      SPRING_DATASOURCE_USERNAME: oracle
+      SPRING_DATASOURCE_PASSWORD: oracle_password
+    # A comunicação é interna entre Nginx e Java.
+    expose:
+      - "8080"
+
+  # 3. Frontend
+  frontend:
+    build: ./front-end
+    container_name: sentiment-ui
+    depends_on:
+      - backend
+    ports:
+      - "80:80" # Porta padrão da Web (HTTP)
+
+volumes:
+  postgres_data:
