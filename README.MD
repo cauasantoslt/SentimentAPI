@@ -99,8 +99,8 @@ Ele atua como a camada intermediária entre as aplicações clientes e o modelo 
 | **Maven** | 3.9 | Gerenciamento de dependências e build |
 | **ONNX Runtime** | 1.19.2 | Execução do modelo de Machine Learning |
 | **Nginx** | Opcional | Proxy Reverso utilizado para servir o Frontend |
-| **PostgreSQL** | Opcional | Banco de dados para persistência de dados |
-| **Flyway** | Opcional | Gerenciamento de migrações de banco de dados |
+| **PostgreSQL** | 15-Alpine | Banco de dados para persistência de dados |
+| **Flyway** | Latest | Gerenciamento de migrações de banco de dados |
 
 ## 🏗️ Arquitetura da Aplicação
 
