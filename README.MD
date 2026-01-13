@@ -238,6 +238,6 @@ Time responsável pelo desenvolvimento da solução:
 | :--- | :--- |
 | [Julio Clepf de Carvalho](https://www.linkedin.com/in/julio-clepf/) | [Carolini Rufino dos Santos](https://www.linkedin.com/in/carolinirufino) |
  [Laura Tenan](https://www.linkedin.com/in/laura-tenan/) | [Cauã Santos](https://linkedin.com/in/cauasantoslt) | 
-| [Keila De Oliveira Nunes](https://www.linkedin.com/in/keilanunes-dev) | [Jefferson Franca Ferreira](link) |
+| [Keila De Oliveira Nunes](https://www.linkedin.com/in/keilanunes-dev) | [Jefferson Franca Ferreira](https://www.linkedin.com/in/jefferson-ferreira-ds/) |
 | [Pedro Henrique de Assis Ferreira](https://www.linkedin.com/in/phaferreira/) | 
 | [Rafael Silva Nunes](https://www.linkedin.com/in/rafaelsilvanunes) | 
