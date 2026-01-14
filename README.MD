@@ -107,6 +107,23 @@ Ele atua como a camada intermediária entre as aplicações clientes e o modelo 
 | **Flyway** | Latest | Gerenciamento de migrações de banco de dados |
 | **HTML/CSS/JS** | Vanilla | Interface Web leve e responsiva |
 
+## 🎨 Front-end
+O front-end da aplicação foi desenvolvido utilizando tecnologias web padrão para garantir leveza e facilidade de manutenção. Ele consome a API de análise de sentimentos e apresenta os resultados de forma amigável.
+### 🛠 Tecnologias Utilizadas
+- **HTML5**: Estruturação semântica das páginas.
+- **CSS3**: Estilização responsiva e customizada (localizado em `styles/`).
+- **JavaScript (Vanilla)**: Lógica de interação com o usuário e requisições à API (localizado em `scripts/`).
+- **Nginx**: Servidor web utilizado para servir os arquivos estáticos na versão containerizada.
+- **Docker**: Containerização da aplicação front-end.
+### 📂 Estrutura de Páginas
+- **Home (`index.html`)**: Página inicial de apresentação do projeto.
+- **Análise (`analyze.html`)**: Interface principal onde o usuário pode:
+  - Inserir texto manualmente para análise de sentimento.
+  - Fazer upload de arquivos `.csv` ou `.txt` para análise em lote.
+  - Visualizar a classificação (Positivo/Negativo/Neutro), probabilidade e palavras-chave.
+- **Histórico (`history.html`)**: Visualização de análises anteriores.
+- **Estatísticas (`stats.html`)**: Dashboard com métricas das análises realizadas.
+
 ## 🏗️ Arquitetura da Aplicação
 
 O sistema foi estruturado seguindo o padrão **MVC**, organizado da seguinte forma:
