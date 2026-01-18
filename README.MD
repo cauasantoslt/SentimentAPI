@@ -16,7 +16,6 @@ O sistema integra um modelo de Ciência de Dados treinado com técnicas de Proce
 
 O projeto foi desenvolvido como um MVP funcional, com foco na integração entre Back-end e Ciência de Dados, demonstrando uma solução aplicável a cenários reais de negócio.
 
-
 ## 🎯 Problema de Negócio
 
 Empresas recebem diariamente um grande volume de comentários, avaliações e feedbacks de clientes em canais como redes sociais, pesquisas de satisfação e plataformas de atendimento.
@@ -304,6 +303,40 @@ Para rodar a aplicação completa (Banco de Dados + API + Frontend) utilizando D
 * application.jar: artefato executável da aplicação.
 * application.properties: arquivo de configuração com variáveis de ambiente.
 * docker-compose.yml: orquestração dos serviços.
+
+## ☁️ Deploy em Produção (Oracle Cloud Infrastructure – OCI)
+
+O projeto foi implantado em ambiente de produção utilizando a **Oracle Cloud Infrastructure (OCI)**, garantindo escalabilidade, disponibilidade e uma infraestrutura robusta para execução da aplicação completa.
+
+A solução foi configurada com containers Docker, executando o back-end, front-end e banco de dados em nuvem, simulando um cenário real de produção utilizado por aplicações corporativas.
+
+### Principais recursos utilizados na OCI:
+- **Compute Instance (VM)**: Execução dos containers da aplicação.
+- **Docker & Docker Compose**: Orquestração dos serviços em produção.
+- **Rede Virtual (VCN)**: Isolamento e controle de acesso aos serviços.
+- **Portas e Segurança**: Configuração de regras de firewall para acesso público ao frontend e API.
+
+### 🌐 Acesso à aplicação em produção:
+👉 [SentimentAPI](http://204.216.131.97/)
+
+Através desse link é possível acessar a interface web da aplicação, realizar análises de sentimento, processar arquivos em lote, consultar histórico e visualizar estatísticas em tempo real.
+
+## 📺 Demonstração do Projeto (YouTube)
+
+Disponibilizamos um vídeo demonstrativo apresentando o projeto de forma completa, abordando:
+
+- Visão geral da solução e do problema de negócio
+- Explicação da camada de **Data Science** (modelo, técnicas e decisões)
+- Arquitetura e funcionamento do **Back-end**
+- Demonstração do **Front-end em funcionamento**
+- Execução prática da análise de sentimentos, incluindo:
+  - Texto único
+  - Processamento em lote (CSV)
+  - Histórico e estatísticas
+- Aplicação rodando em **ambiente de produção na Oracle Cloud Infrastructure (OCI)**
+
+👉 **Assista ao vídeo:**  
+[Link para o vídeo no YouTube](COLE_AQUI_O_LINK_DO_VIDEO)
 
 ## 🔗 Links para recursos
 * JDK Microsoft: https://learn.microsoft.com/en-us/java/openjdk/download
