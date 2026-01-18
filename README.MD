@@ -335,8 +335,8 @@ Disponibilizamos um vídeo demonstrativo apresentando o projeto de forma complet
   - Histórico e estatísticas
 - Aplicação rodando em **ambiente de produção na Oracle Cloud Infrastructure (OCI)**
 
-👉 **Assista ao vídeo:**  
-[Link para o vídeo no YouTube](COLE_AQUI_O_LINK_DO_VIDEO)
+ **Assista ao vídeo:**  
+👉 [Sentiment API | Hackathon ONE II - Brasil](https://youtu.be/43Q5quqrRGU)
 
 ## 🔗 Links para recursos
 * JDK Microsoft: https://learn.microsoft.com/en-us/java/openjdk/download
